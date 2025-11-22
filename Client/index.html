@@ -89,3 +89,31 @@
 
   <div id="customers-list">Loading...</div>
 </section>
+
+<!-- RENTALS -->
+<section class="card">
+  <div class="section-title">
+    <h2>Rentals <span id="rentals-count"></span></h2>
+    <button id="refresh-rentals">Refresh</button>
+  </div>
+
+  <form id="rental-form" class="inline">
+    <select id="select-bike" name="bike_id">
+      <option value="">Bike</option>
+    </select>
+    <select id="select-customer" name="customer_id">
+      <option value="">Customer</option>
+    </select>
+    <input type="datetime-local" name="start_time">
+    <input type="number" name="hourly_rate" placeholder="Rate" required>
+    <button class="primary">Create Rental</button>
+  </form>
+
+  <div id="rentals-list">Loading...</div>
+</section>
+
+<div id="footer-note"></div>
+
+</div>
+
+<script>
