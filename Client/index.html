@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Bike Rental</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --muted:#6b7280; --accent:#0b76ef;
+    --border:#e6e9ef; --radius:12px; --pad:18px;
+    --maxw:1100px;
+  }
+  body{
+    margin:0; font-family:Inter,system-ui; background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; padding:28px 12px;
+  }
+  .wrap{width:100%; max-width:var(--maxw);}
+  header h1{margin:0; font-size:28px; letter-spacing:-0.3px;}
+  .card{background:var(--card); border-radius:var(--radius);
+    padding:var(--pad); border:1px solid var(--border);
+    box-shadow:0 2px 6px rgba(20,20,40,0.05); margin-bottom:18px;}
+  .section-title{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .section-title h2{margin:0; font-size:20px;}
+  form.inline{display:flex; gap:8px; flex-wrap:wrap;}
+  input, select{
+    padding:8px 10px; border-radius:8px; border:1px solid var(--border);
+    background:#fff; font-size:14px;
+  }
+  button{padding:8px 12px; border-radius:8px; cursor:pointer;
+    border:1px solid #cfd8e3; background:#fff; font-weight:600;}
+  button.primary{background:var(--accent); border-color:var(--accent); color:#fff;}
+  table{width:100%; border-collapse:collapse; font-size:15px;}
+  th,td{padding:10px 12px; border-bottom:1px solid #f1f3f7; text-align:left;}
+  th{font-weight:700;}
+  .actions button{margin-right:6px;}
+  #footer-note{display:none;} /* hidden per your request */
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Bike Rental System</h1>
+</header>
