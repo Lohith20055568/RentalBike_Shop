@@ -44,3 +44,31 @@
 <header>
   <h1>Bike Rental System</h1>
 </header>
+
+<!-- BIKES -->
+<section class="card">
+  <div class="section-title">
+    <h2>Bikes <span id="bikes-count"></span></h2>
+    <div style="display:flex; gap:8px;">
+      <input id="bike-search" placeholder="Search">
+      <select id="bike-sort">
+        <option value="">Sort</option>
+        <option value="hourly_rate">Hourly rate</option>
+      </select>
+      <label style="font-size:14px; color:var(--muted);">
+        <input type="checkbox" id="bike-available-only"> Available only
+      </label>
+      <button id="refresh-bikes">Refresh</button>
+    </div>
+  </div>
+
+  <form id="bike-form" class="inline">
+    <input name="sku" placeholder="SKU" required>
+    <input name="model" placeholder="Model" required>
+    <input name="type" placeholder="Type">
+    <input type="number" name="hourly_rate" placeholder="Rate" required>
+    <button class="primary">Add Bike</button>
+  </form>
+
+  <div id="bikes-list">Loading...</div>
+</section>
