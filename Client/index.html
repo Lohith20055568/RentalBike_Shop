@@ -193,3 +193,24 @@ async function deleteBike(id){
   await fetch(api('/bikes/'+id), {method:'DELETE'});
   loadBikes();
 }
+
+/* ----- Customers ----- */
+async function loadCustomers(){
+  const res = await fetch(api('/customers'));
+  const c = await res.json();
+  $('customers-count').textContent = `(${c.length})`;
+  $('customers-list').innerHTML = `
+    <table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr></thead>
+    <tbody>${c.map(x=>`<tr><td>${x.id}</td><td>${html(x.name)}</td><td>${html(x.email||'')}</td><td>${html(x.phone||'')}</td></tr>`).join("")}</tbody></table>`;
+  const s = $('select-customer');
+  s.innerHTML = '<option value="">Customer</option>' + c.map(x=>`<option value="${x.id}">${x.id} — ${html(x.name)}</option>`).join('');
+}
+$('customer-form').onsubmit = async e=>{
+  e.preventDefault();
+  const f = e.target;
+  await fetch(api('/customers'),{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:f.name.value,email:f.email.value,phone:f.phone.value})
+  });
+  f.reset(); loadCustomers();
+};
