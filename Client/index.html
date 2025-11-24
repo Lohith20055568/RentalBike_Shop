@@ -186,3 +186,10 @@ async function editBike(id){
   });
   loadBikes();
 }
+
+/* delete bike */
+async function deleteBike(id){
+  if(!confirm("Delete bike?")) return;
+  await fetch(api('/bikes/'+id), {method:'DELETE'});
+  loadBikes();
+}
