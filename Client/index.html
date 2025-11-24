@@ -262,3 +262,16 @@ async function deleteRental(id){
   await fetch(api('/rentals/'+id), {method:'DELETE'});
   loadRentals();
 }
+
+/* ----- Init ----- */
+window.onload = ()=>{
+  const t = new Date();
+  const local = new Date(t - t.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  document.querySelector('input[name="start_time"]').value = local;
+  loadBikes(); loadCustomers(); loadRentals();
+};
+</script>
+
+</body>
+</html>
+HTML
