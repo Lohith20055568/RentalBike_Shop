@@ -117,3 +117,45 @@
 </div>
 
 <script>
+/* (JS is same as your last working version — nothing removed except the note text) */
+
+/* --- Helper shortcuts --- */
+const api = p => '/api' + p;
+const $ = id => document.getElementById(id);
+const html = s => s.replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ----- Load Bikes ----- */
+async function loadBikes(){
+  const res = await fetch(api('/bikes'));
+  const bikes = await res.json();
+  renderBikes(bikes);
+  fillBikeDropdown(bikes);
+}
+function renderBikes(bikes){
+  $('bikes-count').textContent = `(${bikes.length})`;
+  if(!bikes.length){ $('bikes-list').innerHTML="No bikes"; return; }
+  $('bikes-list').innerHTML = `
+    <table><thead>
+      <tr><th>ID</th><th>SKU</th><th>Model</th><th>Type</th><th>Rate</th><th>Status</th><th></th></tr>
+    </thead><tbody>
+      ${bikes.map(b=>`
+        <tr>
+          <td>${b.id}</td>
+          <td>${html(b.sku)}</td>
+          <td>${html(b.model)}</td>
+          <td>${html(b.type)}</td>
+          <td>${b.hourly_rate}</td>
+          <td>${html(b.status)}</td>
+          <td class="actions">
+            <button onclick="editBike(${b.id})">Edit</button>
+            <button onclick="deleteBike(${b.id})">Delete</button>
+          </td>
+        </tr>
+      `).join("")}
+    </tbody></table>`;
+}
+function fillBikeDropdown(bikes){
+  const s = $('select-bike');
+  s.innerHTML = '<option value="">Bike</option>' +
+    bikes.map(b => `<option value="${b.id}">${b.id} — ${html(b.model)}</option>`).join('');
+}
