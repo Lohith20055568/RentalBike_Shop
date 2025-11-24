@@ -170,3 +170,19 @@ $('bike-form').onsubmit = async e=>{
   await fetch(api('/bikes'), {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
   f.reset(); loadBikes();
 };
+
+/* edit bike */
+async function editBike(id){
+  const res = await fetch(api('/bikes/'+id));
+  const b = await res.json();
+  const sku = prompt("SKU", b.sku) || b.sku;
+  const model = prompt("Model", b.model) || b.model;
+  const type = prompt("Type", b.type||'') || b.type;
+  const rate = prompt("Rate", b.hourly_rate) || b.hourly_rate;
+  const status = prompt("Status", b.status) || b.status;
+  await fetch(api('/bikes/'+id), {
+    method:'PUT', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({sku,model,type,hourly_rate:Number(rate),status})
+  });
+  loadBikes();
+}
