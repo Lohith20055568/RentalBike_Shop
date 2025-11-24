@@ -214,3 +214,51 @@ $('customer-form').onsubmit = async e=>{
   });
   f.reset(); loadCustomers();
 };
+
+/* ----- Rentals ----- */
+async function loadRentals(){
+  const res = await fetch(api('/rentals'));
+  const r = await res.json();
+  $('rentals-count').textContent = `(${r.length})`;
+  $('rentals-list').innerHTML = `
+    <table>
+      <thead><tr><th>ID</th><th>Bike</th><th>Customer</th><th>Start</th><th>End</th><th>Status</th><th>Total</th><th></th></tr></thead>
+      <tbody>
+        ${r.map(x=>`
+          <tr>
+            <td>${x.id}</td><td>${x.bike_id}</td><td>${x.customer_id}</td>
+            <td>${html(x.start_time)}</td>
+            <td>${html(x.end_time||'—')}</td>
+            <td>${html(x.status)}</td>
+            <td>${x.total_charged ?? '—'}</td>
+            <td>
+              ${x.status==='active'?`<button onclick="returnRental(${x.id})">Return</button>`:''}
+              <button onclick="deleteRental(${x.id})">Delete</button>
+            </td>
+          </tr>`
+        ).join("")}
+      </tbody>
+    </table>`;
+}
+$('rental-form').onsubmit = async e=>{
+  e.preventDefault();
+  const f = e.target;
+  const body = {
+    bike_id:Number(f.bike_id.value),
+    customer_id:Number(f.customer_id.value),
+    start_time:new Date(f.start_time.value).toISOString(),
+    hourly_rate:Number(f.hourly_rate.value)
+  };
+  await fetch(api('/rentals'), {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  f.reset(); loadRentals(); loadBikes();
+};
+async function returnRental(id){
+  const end = prompt("Return time (ISO)", new Date().toISOString());
+  await fetch(api(`/rentals/${id}/return`), {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({end_time:end})});
+  loadRentals(); loadBikes();
+}
+async function deleteRental(id){
+  if(!confirm("Delete rental?")) return;
+  await fetch(api('/rentals/'+id), {method:'DELETE'});
+  loadRentals();
+}
