@@ -159,3 +159,14 @@ function fillBikeDropdown(bikes){
   s.innerHTML = '<option value="">Bike</option>' +
     bikes.map(b => `<option value="${b.id}">${b.id} — ${html(b.model)}</option>`).join('');
 }
+/* create bike */
+$('bike-form').onsubmit = async e=>{
+  e.preventDefault();
+  const f = e.target;
+  const body = {
+    sku:f.sku.value, model:f.model.value, type:f.type.value,
+    hourly_rate:Number(f.hourly_rate.value)
+  };
+  await fetch(api('/bikes'), {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  f.reset(); loadBikes();
+};
