@@ -25,3 +25,17 @@ app.get('/', (req, res) => {
  * Simple write queue to avoid concurrent writes corrupting file
  */
 let writeLock = Promise.resolve();
+
+async function readData() {
+  try {
+    const raw = await fs.readFile(DATA_FILE, 'utf8');
+    return JSON.parse(raw);
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      const init = { bikes: [], customers: [], rentals: [], nextIds: { bikes: 1, customers: 1, rentals: 1 } };
+      await writeData(init);
+      return init;
+    }
+    throw e;
+  }
+}
