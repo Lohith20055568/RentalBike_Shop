@@ -39,3 +39,12 @@ async function readData() {
     throw e;
   }
 }
+
+function writeData(data) {
+  writeLock = writeLock.then(async () => {
+    const tmp = DATA_FILE + '.tmp';
+    await fs.writeFile(tmp, JSON.stringify(data, null, 2), 'utf8');
+    await fs.rename(tmp, DATA_FILE);
+  }).catch(err => console.error('writeData error', err));
+  return writeLock;
+}
