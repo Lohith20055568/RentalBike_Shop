@@ -88,3 +88,16 @@ async function updateById(kind, id, patch) {
   await writeData(data);
   return data[kind][idx];
 }
+
+async function deleteById(kind, id) {
+  const data = await readData();
+  const idx = data[kind].findIndex(x => x.id === Number(id));
+  if (idx === -1) {
+    const e = new Error('Not found');
+    e.status = 404;
+    throw e;
+  }
+  const removed = data[kind].splice(idx, 1)[0];
+  await writeData(data);
+  return removed;
+}
