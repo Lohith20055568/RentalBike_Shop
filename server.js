@@ -48,3 +48,20 @@ function writeData(data) {
   }).catch(err => console.error('writeData error', err));
   return writeLock;
 }
+
+/* ---------- generic helpers ---------- */
+
+async function createEntity(kind, payload, required = []) {
+  if (required.some(f => payload[f] === undefined || payload[f] === '')) {
+    const missing = required.filter(f => payload[f] === undefined || payload[f] === '');
+    const e = new Error('Missing fields: ' + missing.join(', '));
+    e.status = 400;
+    throw e;
+  }
+  const data = await readData();
+  const id = data.nextIds[kind]++;
+  const entity = { id, ...payload };
+  data[kind].push(entity);
+  await writeData(data);
+  return entity;
+}
