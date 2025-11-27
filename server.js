@@ -65,3 +65,13 @@ async function createEntity(kind, payload, required = []) {
   await writeData(data);
   return entity;
 }
+
+async function getAll(kind) {
+  const data = await readData();
+  return data[kind];
+}
+
+async function getById(kind, id) {
+  const data = await readData();
+  return data[kind].find(x => x.id === Number(id));
+}
