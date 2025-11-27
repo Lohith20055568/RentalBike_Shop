@@ -75,3 +75,16 @@ async function getById(kind, id) {
   const data = await readData();
   return data[kind].find(x => x.id === Number(id));
 }
+
+async function updateById(kind, id, patch) {
+  const data = await readData();
+  const idx = data[kind].findIndex(x => x.id === Number(id));
+  if (idx === -1) {
+    const e = new Error('Not found');
+    e.status = 404;
+    throw e;
+  }
+  data[kind][idx] = { ...data[kind][idx], ...patch };
+  await writeData(data);
+  return data[kind][idx];
+}
