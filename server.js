@@ -125,3 +125,21 @@ app.get('/api/bikes/:id', async (req, res) => {
   if (!bike) return res.status(404).json({ error: 'Not found' });
   res.json(bike);
 });
+
+app.post('/api/bikes', async (req, res, next) => {
+  try {
+    const { sku, model, type, hourly_rate, notes } = req.body;
+    const data = await readData();
+
+    if (sku && data.bikes.some(b => b.sku === sku))
+      return res.status(400).json({ error: 'SKU already exists' });
+
+    const bike = await createEntity(
+      'bikes',
+      { sku, model, type, hourly_rate, status: 'available', notes },
+      ['sku', 'model', 'hourly_rate']
+    );
+
+    res.status(201).json(bike);
+  } catch (e) { next(e); }
+});
