@@ -119,3 +119,9 @@ app.get('/api/bikes', async (req, res) => {
 
   res.json(bikes);
 });
+
+app.get('/api/bikes/:id', async (req, res) => {
+  const bike = await getById('bikes', req.params.id);
+  if (!bike) return res.status(404).json({ error: 'Not found' });
+  res.json(bike);
+});
