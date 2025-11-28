@@ -143,3 +143,17 @@ app.post('/api/bikes', async (req, res, next) => {
     res.status(201).json(bike);
   } catch (e) { next(e); }
 });
+
+app.put('/api/bikes/:id', async (req, res, next) => {
+  try {
+    const updated = await updateById('bikes', req.params.id, req.body);
+    res.json(updated);
+  } catch (e) { next(e); }
+});
+
+app.delete('/api/bikes/:id', async (req, res, next) => {
+  try {
+    const deleted = await deleteById('bikes', req.params.id);
+    res.json({ deleted });
+  } catch (e) { next(e); }
+});
