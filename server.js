@@ -101,3 +101,21 @@ async function deleteById(kind, id) {
   await writeData(data);
   return removed;
 }
+
+/* ---------- Bikes API ---------- */
+app.get('/api/bikes', async (req, res) => {
+  const q = req.query.q;
+  const available = req.query.available;
+  const sort = req.query.sort;
+  let bikes = await getAll('bikes');
+
+  if (q) bikes = bikes.filter(b =>
+    (b.model || '').toLowerCase().includes(q.toLowerCase()) ||
+    (b.sku || '').toLowerCase().includes(q.toLowerCase())
+  );
+
+  if (available === 'true') bikes = bikes.filter(b => b.status === 'available');
+  if (sort === 'hourly_rate') bikes = bikes.sort((a, b) => a.hourly_rate - b.hourly_rate);
+
+  res.json(bikes);
+});
