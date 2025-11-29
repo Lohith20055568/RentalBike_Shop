@@ -181,3 +181,9 @@ app.post('/api/customers', async (req, res, next) => {
     res.status(201).json(customer);
   } catch (e) { next(e); }
 });
+
+/* ---------- Rentals API ---------- */
+app.get('/api/rentals', async (req, res) => {
+  const data = await readData();
+  res.json(data.rentals);
+});
