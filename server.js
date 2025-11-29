@@ -157,3 +157,27 @@ app.delete('/api/bikes/:id', async (req, res, next) => {
     res.json({ deleted });
   } catch (e) { next(e); }
 });
+
+/* ---------- Customers API ---------- */
+app.get('/api/customers', async (req, res) => {
+  const customers = await getAll('customers');
+  res.json(customers);
+});
+
+app.post('/api/customers', async (req, res, next) => {
+  try {
+    const { name, email, phone } = req.body;
+    const data = await readData();
+
+    if (email && data.customers.some(c => c.email === email))
+      return res.status(400).json({ error: 'Email already exists' });
+
+    const customer = await createEntity(
+      'customers',
+      { name, email, phone },
+      ['name']
+    );
+
+    res.status(201).json(customer);
+  } catch (e) { next(e); }
+});
