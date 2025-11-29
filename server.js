@@ -215,3 +215,11 @@ app.post('/api/rentals', async (req, res, next) => {
       total_charged: null,
       status: 'active'
     };
+
+    data.rentals.push(rental);
+    bike.status = 'rented';
+
+    await writeData(data);
+    res.status(201).json(rental);
+  } catch (e) { next(e); }
+});
