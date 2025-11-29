@@ -187,3 +187,31 @@ app.get('/api/rentals', async (req, res) => {
   const data = await readData();
   res.json(data.rentals);
 });
+
+app.post('/api/rentals', async (req, res, next) => {
+  try {
+    const { bike_id, customer_id, start_time, hourly_rate } = req.body;
+
+    if (!bike_id || !customer_id || !start_time || !hourly_rate)
+      return res.status(400).json({ error: 'Missing fields' });
+
+    const data = await readData();
+    const bike = data.bikes.find(b => b.id === Number(bike_id));
+    if (!bike) return res.status(404).json({ error: 'Bike not found' });
+    if (bike.status !== 'available')
+      return res.status(400).json({ error: 'Bike not available' });
+
+    const customer = data.customers.find(c => c.id === Number(customer_id));
+    if (!customer) return res.status(404).json({ error: 'Customer not found' });
+
+    const id = data.nextIds.rentals++;
+    const rental = {
+      id,
+      bike_id: Number(bike_id),
+      customer_id: Number(customer_id),
+      start_time,
+      end_time: null,
+      hourly_rate: Number(hourly_rate),
+      total_charged: null,
+      status: 'active'
+    };
