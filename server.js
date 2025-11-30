@@ -255,3 +255,20 @@ app.put('/api/rentals/:id/return', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+app.delete('/api/rentals/:id', async (req, res, next) => {
+  try {
+    const data = await readData();
+    const idx = data.rentals.findIndex(r => r.id === Number(req.params.id));
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+
+    const rental = data.rentals.splice(idx, 1)[0];
+
+    if (rental.status === 'active') {
+      const bike = data.bikes.find(b => b.id === rental.bike_id);
+      if (bike) bike.status = 'available';
+    }
+
+    await writeData(data);
+    res.json({ deleted: rental });
+  } catch (e) { next(e); }
+});
