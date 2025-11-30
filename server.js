@@ -223,3 +223,21 @@ app.post('/api/rentals', async (req, res, next) => {
     res.status(201).json(rental);
   } catch (e) { next(e); }
 });
+
+app.put('/api/rentals/:id/return', async (req, res, next) => {
+  try {
+    const { end_time } = req.body;
+    if (!end_time) return res.status(400).json({ error: 'end_time required' });
+
+    const data = await readData();
+    const rIdx = data.rentals.findIndex(r => r.id === Number(req.params.id));
+    if (rIdx === -1) return res.status(404).json({ error: 'Rental not found' });
+
+    const rental = data.rentals[rIdx];
+    if (rental.status !== 'active')
+      return res.status(400).json({ error: 'Rental not active' });
+
+    const start = new Date(rental.start_time);
+    const end = new Date(end_time);
+    if (end < start)
+      return res.status(400).json({ error: 'end_time before start_time' });
