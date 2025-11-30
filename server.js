@@ -241,3 +241,17 @@ app.put('/api/rentals/:id/return', async (req, res, next) => {
     const end = new Date(end_time);
     if (end < start)
       return res.status(400).json({ error: 'end_time before start_time' });
+
+    const hours = Math.ceil((end - start) / (1000 * 60 * 60));
+    rental.total_charged = hours * rental.hourly_rate;
+    rental.end_time = end_time;
+    rental.status = 'returned';
+
+    const bike = data.bikes.find(b => b.id === rental.bike_id);
+    if (bike) bike.status = 'available';
+
+    await writeData(data);
+    res.json(rental);
+  } catch (e) { next(e); }
+});
+
