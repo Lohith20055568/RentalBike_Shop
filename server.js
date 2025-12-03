@@ -272,3 +272,16 @@ app.delete('/api/rentals/:id', async (req, res, next) => {
     res.json({ deleted: rental });
   } catch (e) { next(e); }
 });
+
+/* ---------- error handler ---------- */
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({ error: err.message || 'Server error' });
+});
+
+/* ---------- start / export for tests ---------- */
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+} else {
+  module.exports = app;
+}
