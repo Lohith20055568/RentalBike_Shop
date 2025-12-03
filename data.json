@@ -1,0 +1,37 @@
+{
+  "bikes": [
+    {
+      "id": 1,
+      "sku": "Duke",
+      "model": "200",
+      "type": "Petrol",
+      "hourly_rate": 10,
+      "status": "available"
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "name": "Vijay",
+      "email": "vjk2899@gmail.com",
+      "phone": "0899987646"
+    }
+  ],
+  "rentals": [
+    {
+      "id": 1,
+      "bike_id": 1,
+      "customer_id": 1,
+      "start_time": "2025-12-03T12:43:00.000Z",
+      "end_time": "2025-12-03T12:48:59.352Z",
+      "hourly_rate": 10,
+      "total_charged": 10,
+      "status": "returned"
+    }
+  ],
+  "nextIds": {
+    "bikes": 2,
+    "customers": 2,
+    "rentals": 2
+  }
+}
